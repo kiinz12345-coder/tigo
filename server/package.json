@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "main": "socket.js",
   "scripts": {
-    "start": "node socket.js"
+    "start": "node socket.js",
+    "postinstall": "prisma generate --schema=./prisma/schema.prisma"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "express": "^4.21.1",
     "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0"
   }
 }
