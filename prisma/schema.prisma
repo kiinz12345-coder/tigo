@@ -1,0 +1,71 @@
+﻿generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String          @id @default(cuid())
+  email             String          @unique
+  name              String?
+  gender            Gender?
+  credits           Int             @default(0)
+  earnings          Float           @default(0)
+  dailyFreeTickets  Int             @default(2)
+  lastTicketDate    DateTime?
+  role              UserRole        @default(USER)
+  createdAt         DateTime        @default(now())
+  sessions          VideoSession[]
+  creditHistory     CreditLog[]
+  accounts          Account[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model CreditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  amount    Int
+  type      String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model VideoSession {
+  id            String   @id @default(cuid())
+  manId         String
+  womanId       String
+  startTime     DateTime @default(now())
+  endTime       DateTime?
+  durationSecs  Int?
+  creditsSpent  Int?
+  creditsEarned Int?
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}

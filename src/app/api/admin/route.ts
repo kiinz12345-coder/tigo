@@ -1,0 +1,9 @@
+﻿import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { NextResponse } from "next/server";
+export async function GET() {
+  const session = await auth();
+  if (session?.user?.role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const users = await db.user.findMany({ include: { creditHistory: true } });
+  return NextResponse.json(users);
+}
