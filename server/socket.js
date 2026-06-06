@@ -1,7 +1,7 @@
 ﻿const express = require('express');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('./node_modules/@prisma/client');
 
 const prisma = new PrismaClient();
 const app = express();
